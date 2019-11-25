@@ -3,13 +3,12 @@ from datetime import datetime
 import PySimpleGUI as sg
 
 # CONFIG
-import_file_name = 'Nov22_orders_export.csv'
 stamp = datetime.now().strftime('%Y%m%d')
 export_file_name = f"order_import_{stamp}.txt"
 
 def main():
     layout = [
-        [sg.Text('Shopify to 3PL Central Converter', size=(0,1), font=('Calibri',16))], 
+        [sg.Text('Shopify to 3PL Central Order Converter', size=(0,1), font=('Calibri',16))], 
         [sg.Text('Select Shopify CSV file: ', size=(30,1))],
         [sg.In(disabled=True), sg.FileBrowse(file_types=(('CSV Files', 'csv'),))],
         [sg.Text('File to Export:', size=(30,1))], 
@@ -17,7 +16,7 @@ def main():
         [sg.Text('https://github.com/Midnex/Shopify_to_3PL_Central_Import', size=(0,1), font=('Calibri', 8))]
     ]
 
-    window = sg.Window('Shopify to 3PL Central Converter').Layout(layout)
+    window = sg.Window('Shopify to 3PL Central Order Converter').Layout(layout)
     convert_button, values = window.Read()
     if convert_button == 'Convert':
         convert(values[0])
@@ -36,7 +35,6 @@ def txt_writer(row):
 
 def checkNumData(item):
     return ''.join([char for char in item if char.isdigit()])
-
 
 def convert(file):
     ReferenceNumber = ''
@@ -71,7 +69,7 @@ def convert(file):
     Notes = ''
 
     dataList = []
-    with open(import_file_name, 'r') as f:
+    with open(file, 'r') as f:
         data = csv.DictReader(f)
         for i in data:
             dataList.append([i])
@@ -117,7 +115,39 @@ def convert(file):
             Carrier = ''
             Notes = row['Notes']
 
-            line = [ReferenceNumber, PurchaseOrderNumber, ShipCarrier, ShipService, ShipBilling, ShipAccount, ShipDate, CancelDate, Notes, ShipToName, ShipToCompany, ShipToAddress1, ShipToAddress2, ShipToCity, ShipToState, ShipToZip, ShipToCountry, ShipToPhone, ShipToFax, ShipToEmail, ShipToCustomerID, ShipToDeptNumber, RetailerID, Sku, Quantity, UseCOD, UseInsuranceSavedElements, LineItemSavedElements, Carrier, Notes]
+            line = [
+                ReferenceNumber, 
+                PurchaseOrderNumber, 
+                ShipCarrier, 
+                ShipService, 
+                ShipBilling, 
+                ShipAccount, 
+                ShipDate, 
+                CancelDate, 
+                Notes, 
+                ShipToName, 
+                ShipToCompany, 
+                ShipToAddress1, 
+                ShipToAddress2, 
+                ShipToCity, 
+                ShipToState, 
+                ShipToZip, 
+                ShipToCountry, 
+                ShipToPhone, 
+                ShipToFax, 
+                ShipToEmail, 
+                ShipToCustomerID, 
+                ShipToDeptNumber, 
+                RetailerID, 
+                Sku, 
+                Quantity, 
+                UseCOD, 
+                UseInsuranceSavedElements, 
+                LineItemSavedElements, 
+                Carrier, 
+                Notes
+            ]
+
             txt_writer(line)
 
 if __name__ == '__main__':
