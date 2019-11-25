@@ -3,6 +3,8 @@ from datetime import datetime
 import PySimpleGUI as sg
 
 # CONFIG
+standard_shipping = 'FedEx'
+standard_service = 'Ground'
 stamp = datetime.now().strftime('%Y%m%d')
 export_file_name = f"order_import_{stamp}.txt"
 
@@ -83,8 +85,8 @@ def convert(file):
                 ShipCarrier = 'USPS'
                 ShipService = 'Priority Mail'
             elif 'Standard Shipping' in row['Shipping Method']:
-                ShipCarrier = 'USPS'
-                ShipService = 'Standard Shipping'
+                ShipCarrier = standard_shipping
+                ShipService = standard_service
             elif 'Â® ' in row['Shipping Method']:
                 ShipCarrier = row['Shipping Method'].split('Â® ')[0]
                 ShipService = row['Shipping Method'].split('Â® ')[1]
